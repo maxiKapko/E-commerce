@@ -16,7 +16,10 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
-                        Products
+                        My Products
+                    </x-nav-link>
+                    <x-nav-link :href="route('market.index')" :active="request()->routeIs('market.*')">
+                        Market
                     </x-nav-link>
                     <x-nav-link :href="route('carts.index')" :active="request()->routeIs('carts.*')">
                         Cart

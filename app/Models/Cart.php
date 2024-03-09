@@ -20,4 +20,9 @@ class Cart extends Model
     {
         return $this->BelongsToMany(Product::class);
     }
+
+    public static function findByUserId($id)
+    {
+        return static::where('user_id', $id)->first();
+    }
 }

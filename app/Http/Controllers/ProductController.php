@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -13,7 +15,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('Products.index');
+        $user_id = auth()->id();
+        $products = Product::where('user_id', $user_id)->get();
+
+        return view('Products.index', ['products' => $products]);
     }
 
     /**
@@ -23,7 +28,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('Products.create');
     }
 
     /**
@@ -32,9 +37,13 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+        Product::create($data);
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -56,7 +65,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        return view('products.edit', ['product' => $product]);
     }
 
     /**
@@ -66,9 +77,12 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->update($request->validated());
+
+        return redirect()->route('products.index');
     }
 
     /**

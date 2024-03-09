@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Cart;
 
 class CartsController extends Controller
 {
@@ -13,7 +14,10 @@ class CartsController extends Controller
      */
     public function index()
     {
-        return view('Carts.index');
+        $user_id = auth()->id();
+   
+        $cart = Cart::where('user_id', $user_id)->first();
+        return view('Carts.index', ['cart' => $cart]);
     }
 
     /**
@@ -34,7 +38,20 @@ class CartsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user_id = Auth()->id();
+        $cart = Cart::findByUserId($user_id);
+
+        if (!$cart) {
+            $cart = new Cart();
+            $cart->user_id = $user_id;
+            $cart->save();
+        }
+
+        $product_id = $request->product_id;
+
+        $cart->products()->attach($product_id);
+
+        return redirect()->route('products.index');
     }
 
     /**

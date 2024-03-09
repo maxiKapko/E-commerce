@@ -9,4 +9,14 @@
         </h2>
     </div>
 </header>
+@if ($cart)
+<h2>Products in Cart</h2>
+<ul>
+    @foreach ($cart->products as $product)
+    <li>{{ $product->name }} - {{ $product->price }}</li>
+    @endforeach
+</ul>
+@else
+<p>No products in the cart.</p>
+@endif
 @endsection
