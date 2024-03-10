@@ -20,6 +20,13 @@ class CartsController extends Controller
         $user_id = auth()->id();
 
         $cart = Cart::where('user_id', $user_id)->first();
+
+        if (!$cart) {
+            $cart = new Cart();
+            $cart->user_id = $user_id;
+            $cart->save();
+        }
+
         $totalCost = CartService::calculateTotalCost($cart);
         $cart->totalCost = $totalCost;
 
@@ -85,7 +92,7 @@ class CartsController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource=Product from Cart instance.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
