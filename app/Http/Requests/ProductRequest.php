@@ -33,7 +33,7 @@ class ProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'price' => __('The maximum number of decimals allowed are 2.')
+            'price' => __('The maximum number of decimals allowed are 2.'),
         ];
     }
 }

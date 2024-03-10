@@ -10,7 +10,7 @@
     </div>
 </header>
 <div>
-    <form method="POST" action="{{ route('products.store') }}">
+    <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="form-group row">
             <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
@@ -28,6 +28,17 @@
             <div class="col-md-6">
                 <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" required autocomplete="description" autofocus>
                 @error('description')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="images" class="col-md-4 col-form-label text-md-right">Images</label>
+            <div class="col-md-6">
+                <input id="images" type="file" class="form-control @error('images') is-invalid @enderror" name="images[]" value="{{ old('images') }}" autocomplete="images" autofocus multiple="multiple">
+                @error('images')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
@@ -56,4 +67,3 @@
 
 </div>
 @endsection
-

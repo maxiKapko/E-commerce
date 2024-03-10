@@ -16,6 +16,11 @@ class Product extends Model
         return $this->BelongsToMany(Cart::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(Images::class);
+    }
+
     public function scopeAvailable($query)
     {
         return $query->where('available', true);

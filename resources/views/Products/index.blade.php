@@ -16,9 +16,15 @@
 
 </div>
 
-<div class="max-w-7xl mx-auto flex px-10 py-10 gap-10 bg-white">
+<div class="max-w-7xl mx-auto flex px-10 py-10 gap-10 bg-white flex-wrap">
     @foreach($products as $indexProduct => $product)
+
     <div class="bg-white px-4 py-4 rounded-lg w-60 pb-14 relative border-2 shadow-md">
+        @if ($product->images->isNotEmpty())
+        <div>
+            <img src="{{ asset($product->images->first()->image_uri) }}" alt="Product Image">
+        </div>
+        @endif
         <div class="flex">
             <div class=" w-40 text-md">{{ $product->name }}</div>
             <div class="w-2 text-sm font-bold">${{ $product->price }}</div>
