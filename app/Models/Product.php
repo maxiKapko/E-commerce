@@ -15,4 +15,14 @@ class Product extends Model
     {
         return $this->BelongsToMany(Cart::class);
     }
+
+    public function scopeAvailable($query)
+    {
+        return $query->where('available', true);
+    }
+
+    public function scopeNotSold($query)
+    {
+        return $query->where('sold', false);
+    }
 }

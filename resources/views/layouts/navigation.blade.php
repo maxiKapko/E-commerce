@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('carts.index')" :active="request()->routeIs('carts.*')">
                         Cart
                     </x-nav-link>
+                    <x-nav-link :href="route('carts.index')">
+                        Admin Panel
+                    </x-nav-link>
                 </div>
             </div>
 

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Models\Product;
+use App\Services\CartService;
+
 
 class CartsController extends Controller
 {
@@ -15,19 +18,12 @@ class CartsController extends Controller
     public function index()
     {
         $user_id = auth()->id();
-   
-        $cart = Cart::where('user_id', $user_id)->first();
-        return view('Carts.index', ['cart' => $cart]);
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $cart = Cart::where('user_id', $user_id)->first();
+        $totalCost = CartService::calculateTotalCost($cart);
+        $cart->totalCost = $totalCost;
+
+        return view('Carts.index', ['cart' => $cart]);
     }
 
     /**
@@ -39,19 +35,19 @@ class CartsController extends Controller
     public function store(Request $request)
     {
         $user_id = Auth()->id();
-        $cart = Cart::findByUserId($user_id);
+        $product_id = $request->product_id;
 
+        $cart = Cart::findByUserId($user_id);
         if (!$cart) {
             $cart = new Cart();
             $cart->user_id = $user_id;
             $cart->save();
         }
-
-        $product_id = $request->product_id;
-
         $cart->products()->attach($product_id);
+        $data_product['available'] = false;
+        Product::where('id', $product_id)->update($data_product);
 
-        return redirect()->route('products.index');
+        return redirect()->route('market.index');
     }
 
     /**
@@ -96,6 +92,17 @@ class CartsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user_id = Auth()->id();
+        $product_id = $id;
+
+        $cart = Cart::findByUserId($user_id);
+        $cart->products()->detach($product_id);
+        $totalCost = CartService::calculateTotalCost($cart);
+        $cart->totalCost = $totalCost;
+
+        $data_product['available'] = true;
+        Product::where('id', $product_id)->update($data_product);
+
+        return redirect()->route('carts.index');
     }
 }
